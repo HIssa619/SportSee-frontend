@@ -32,10 +32,7 @@ Suivez les instructions fournies dans son README pour le démarrer.
 
 ```bash
 # Clonez ce dépôt
-git clone https://github.com/TON-UTILISATEUR/TON-REPO.git
-
-# Accédez au dossier
-cd ton-repo
+git clone https://github.com/HIssa619/SportSee-frontend.git
 
 # Installez les dépendances
 npm install
