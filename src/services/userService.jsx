@@ -92,21 +92,3 @@ export default {
 };
 
 
-/**
- *  else {
-  const user = mockedData.UserInformation.find((u) => u.id === userId);
-  user.score = user.todayScore ?? user.score;
-  return user;
-}
-
-
-
-return mockedData.UserActivity.find((activity) => activity.userId === userId);
-
-
-
-return mockedData.UserAverageSessions.find((session) => session.userId === userId);
-
-return mockedData.UserPerformance.find((perf) => perf.userId === userId);
-
- */
