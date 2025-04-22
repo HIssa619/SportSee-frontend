@@ -7,65 +7,79 @@ import RadarChartComponent from "../../components/radarChartComponent/RadarChart
 import KeyDataComponent from "../../components/key-data/KeyDataComponent";
 import PieChartComponent from "../../components/pie-chart/PieChartComponent";
 
-/**
- * Tableau de bord principal de l'application.
- *
- * Affiche les données utilisateur sous forme de graphiques (barres, lignes, radar, camembert),
- * ainsi que des indicateurs clés. Toutes les données sont récupérées dynamiquement
- * via des appels asynchrones dès le chargement du composant.
- *
- * @returns {JSX.Element} Interface principale de suivi utilisateur.
- */
-
 const Dashboard = () => {
   const userId = 18;
   const [user, setUser] = useState(null);
   const [userActivities, setUserActivities] = useState(null);
   const [userSessions, setUserSessions] = useState(null);
   const [userPerformance, setUserPerformance] = useState(null);
+  const [error, setError] = useState(null); // ✅ Ajout de l’état d’erreur
 
   useEffect(() => {
     const getUserDetails = async () => {
-      const userData = await userService.fetchUserData(userId);
+      try {
+        const userData = await userService.fetchUserData(userId);
+        setUser(userData);
+      } catch (err) {
+        setError("Impossible de charger les informations de l'utilisateur.");
+      }
+    };
 
-      setUser(userData);
-    };
     const getUserActivity = async () => {
-      const userActivityData = await userService.fetchUserActivity(userId);
-      setUserActivities(userActivityData);
+      try {
+        const userActivityData = await userService.fetchUserActivity(userId);
+        setUserActivities(userActivityData);
+      } catch (err) {
+        setError("Erreur lors du chargement des activités.");
+      }
     };
+
     const getUserSessions = async () => {
-      const userSessionsData = await userService.fetchUserSessions(userId);
-      setUserSessions(userSessionsData.sessions);
+      try {
+        const userSessionsData = await userService.fetchUserSessions(userId);
+        setUserSessions(userSessionsData.sessions);
+      } catch (err) {
+        setError("Erreur lors du chargement des sessions moyennes.");
+      }
     };
+
     const getUserPerformance = async () => {
-      const userPerformanceData = await userService.fetchUserPerformance(
-        userId
-      );
-      setUserPerformance(userPerformanceData);
+      try {
+        const userPerformanceData = await userService.fetchUserPerformance(userId);
+        setUserPerformance(userPerformanceData);
+      } catch (err) {
+        setError("Erreur lors du chargement des performances.");
+      }
     };
 
     getUserDetails();
     getUserActivity();
     getUserSessions();
     getUserPerformance();
-  }, []);
+  }, [userId]);
+
+  // ✅ Affiche une erreur s’il y en a une
+  if (error) {
+    return (
+      <main className="w-full m-[55px] max-w-[1126px] text-red-600 text-xl">
+        <h1>{error}</h1>
+      </main>
+    );
+  }
 
   if (user) {
     return (
       <main className="w-full m-[50px] mb-auto  max-w-[1126px] pb-12">
         <h1 className="text-5xl font-bold mb-8">
-          Bonjour{" "}
-          <span className="text-red-500">{user.userInfos.firstName}</span>
+          Bonjour <span className="text-red-500">{user.userInfos.firstName}</span>
         </h1>
         <p className="congratulation">
           Félicitation ! Vous avez explosé vos objectifs hier 👏
         </p>
         <div className="flex flex-col xl:flex-row mt-10 gap-10">
-          <div className=" w-full xl:w-3/4">
+          <div className="w-full xl:w-3/4">
             <div className="bg-lightgray pb-10 pt-4 rounded-md">
               {userActivities && (
-                // Affiche le graphique uniquement si les données d’activité sont disponibles
                 <BarChartComponent activities={userActivities} />
               )}
             </div>

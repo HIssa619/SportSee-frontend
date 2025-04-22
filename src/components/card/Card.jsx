@@ -19,7 +19,7 @@ const Card = ({ image, link }) => {
     <>
       <Link to={link}>
         <div className="flex justify-center items-center bg-white w-[64px] h-[64px]
-         rounded-md ">
+          rounded-md ">
           <img src={image} alt="Shortcut" />
         </div>
       </Link>
